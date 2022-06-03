@@ -1,0 +1,15 @@
+.cpr2{
+    color: black;
+    font-family: monospace;
+    margin-left: 100px;
+    margin-top: 150px;
+}
+
+.annuler{
+    margin-left: 218px;
+    color: #000000;
+    text-decoration: none;
+}
+.annuler:hover{
+    color: black;
+}

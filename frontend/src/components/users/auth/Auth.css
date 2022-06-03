@@ -1,0 +1,47 @@
+.reset{
+    margin-left: 170px;
+    color: #000000;
+    text-decoration: none;
+}
+.reset:hover{
+    color: rgb(0, 0, 0);
+}
+.cpr1{
+    color: black;
+    font-family: monospace;
+    margin-left: 100px;
+    margin-top: 100px;
+}
+.logo{
+    margin-top: 100px;
+    width: 400px;
+    margin-left: 40px;
+}
+.start{
+    font-family: monospace;
+    width: 300px;
+    margin-left: 100px;
+    margin-top: 50px;
+    background: linear-gradient(-45deg, #192A84, #00599B, #868a8d, #FFFFFF);
+	background-size: 400% 400%;
+	animation: btn 15s ease infinite;
+}
+
+
+@keyframes btn {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+.cpr{
+    color: black;
+    font-family: monospace;
+    margin-left: 100px;
+    margin-top: 280px;
+}

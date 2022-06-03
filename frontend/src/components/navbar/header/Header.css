@@ -1,0 +1,22 @@
+
+.Bonjour{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+    color: #275996;
+    font-size: 25px; 
+}   
+.date{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+    color: #000000;
+    font-size: 21px; 
+    margin-top: 5px;
+    margin-left: 60px;
+}
+.Name{
+    margin-top: 14px;
+    font-size: 23px;
+    font-family: initial;
+    font-style: italic;
+    
+}
