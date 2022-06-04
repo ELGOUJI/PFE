@@ -42,7 +42,7 @@ export default function Form1() {
 	return (
 		<div>
 				<div className="form-group row">
-					<label for="inputEmail3" className="col-sm-2 col-form-label">
+					<label for="inputusername3" className="col-sm-2 col-form-label">
 						Date
 					</label>
 					<div className="col-sm-10">
@@ -50,8 +50,8 @@ export default function Form1() {
 							ref={date}
 							type="Date"
 							className="form-control"
-							id="inputEmail3"
-							placeholder="Email"
+							id="inputusername3"
+							placeholder="username"
 						/>
 					</div>
 				</div>

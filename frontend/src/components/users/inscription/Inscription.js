@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 import "./Inscription.css";
 
 export default function Inscription() {
-  let email = useRef("");
+  let username = useRef("");
   let password = useRef("");
   let Nom = useRef("");
   let Prenom = useRef("");
   let Fillier = useRef("");
 
   let valider = () => {
-    email.current.value == ""
-      ? email.current.classList.add("is-invalid")
-      : email.current.classList.remove("is-invalid");
+    username.current.value == ""
+      ? username.current.classList.add("is-invalid")
+      : username.current.classList.remove("is-invalid");
     password.current.value == ""
       ? password.current.classList.add("is-invalid")
       : password.current.classList.remove("is-invalid");
@@ -61,12 +61,12 @@ export default function Inscription() {
       </div>
       <div className="col-lg-4 offset-lg-4 px-5 mt-3">
         <input
-          ref={email}
+          ref={username}
           className="form-control"
-          type="email"
-          placeholder="Email"
+          type="username"
+          placeholder="username"
         ></input>
-        <div className="invalid-feedback">* Please choose a Email.</div>
+        <div className="invalid-feedback">* Please choose a username.</div>
       </div>
       <div className="col-lg-4 offset-lg-4 px-5 mt-3">
         <input

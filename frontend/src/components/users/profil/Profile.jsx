@@ -94,7 +94,7 @@ export default function Profile() {
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <label>Email</label>
+                    <label>username</label>
                   </div>
                   <div class="col-md-6">
                     <p>fatti-abbour@gmail.com</p>

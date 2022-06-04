@@ -19,7 +19,7 @@ class Professeur(models.Model):
     idU = models.AutoField(primary_key=True)
     Nom = models.CharField(max_length=100)
     Prenom = models.CharField(max_length=100)
-    Email = models.EmailField(max_length=254)
+    Username = models.CharField(max_length=254)
     Photo = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100)    
     
     def __str__(self):

@@ -1,9 +1,11 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Header.css";
 
 export default function Header(props) {
-
+  const deconn = () => {
+    localStorage.clear();
+    window.location.href = '/';
+  }
   return (
     <header className="p-3 mb-3 border-bottom">
     <div className="container">
@@ -30,7 +32,7 @@ export default function Header(props) {
           <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser1">
             <li><a className="dropdown-item" href="/Profile">Profile</a></li>
             <li><hr className="dropdown-divider"/></li>
-            <li><a className="dropdown-item" href="#">Sign out</a></li>
+            <li><a className="dropdown-item" href='#' onClick = {() => deconn()} >Se déconnecter</a></li>
           </ul>
         </div>
       </div>

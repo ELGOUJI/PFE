@@ -11,8 +11,15 @@ export default function FormCon1() {
 
 	useEffect(() => {
 		let getdata = async()=>{
-		 let database = await axios.get('http://127.0.0.1:8000/api/salle')
-			setData(database.data)
+			var token = localStorage.getItem('token');
+			console.log(token)
+			let res = await axios.get('http://localhost:8000/api/salle',{
+				headers:{
+					'Authorization':'Bearer '+token
+				}
+			});
+
+			setData(res.data)
 		} ;
 		getdata()
 	}, []);
