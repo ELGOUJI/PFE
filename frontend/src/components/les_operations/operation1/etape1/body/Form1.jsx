@@ -1,46 +1,90 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Form1() {
 	const [datares, setDatares] = useState("");
 	const [results, setResults] = useState([0]);
 	const [reservation, setReservation] = useState([0]);
 	const [salles, setSalles] = useState("");
-
+	const [data, setData] = useState("");
+	const [html, setHtml] = useState("");
 	let Amphi = useRef("");
 	let temp = useRef("");
 	let date = useRef("");
 
-	let cherche = async () => {
-		const datas = (
-			await axios.get("http://127.0.0.1:8000/api/salle", {
-				responseType: "json ",
-			})
-		).data;
+	const sallers1 = ["TD 1", "TD 2", "TD 3", "TD 4", "TD 5", "TD 6", "TD 7"];
+	const sallers2 = [
+		"Amphi 1",
+		"Amphi 2",
+		"Amphi 3",
+		"Amphi 4",
+		"Amphi 5",
+		"Amphi 6",
+		"Amphi 7",
+	];
+	const sallers3 = ["MS 1", "MS 2", "MS 3", "MS 4", "MS 5", "MS 6", "MS 7"];
 
-		const datar = (
-			await axios.get("http://127.0.0.1:8000/api/reservation", {
-				responseType: "json ",
-			})
-		).data;
+	useEffect(() => {
+		let getdata = async () => {
+			var token = localStorage.getItem("token");
+			console.log(token);
+			let res = await axios.get("http://localhost:8000/api/reservation", {
+				headers: {
+					Authorization: "Bearer " + token,
+				},
+			});
 
-		
-		setDatares(datar.filter((result) => result.Houre !== temp.current.value));
+			setData(res.data);
+		};
+		getdata();
+	}, []);
 
-		setResults(datas.filter((result) => result.Type === Amphi.current.value));
-
-		setReservation(results.filter((result) => result.Type === datares.Houre))
-
-
-		setSalles(reservation.map((salle)=>
-		<a href="#" className="list-group-item list-group-item-action">
-		{salle.Nom}</a>))
-
-		console.log(reservation);
+	let cherche = () => {
+		var filter = {
+			dataRES: date.current.value == "" ? new Date() : date.current.value,
+			Type: Amphi.current.value,
+			Houre: temp.current.value,
+		};
+		let rese = data.filter(
+			(result) =>
+				result.Type.split(" ")[0] == filter.Type &&
+				result.Houre == filter.Houre &&
+				result.dateRES ==   filter.dateRES
+		);
+		let salles = [];
+		let sallespourres = [];
+		for (let salle of rese) {
+			salles.push(salle.Type);
+		}
+		if (Amphi.current.value == "TD") {
+			for (let x of sallers1) {
+				if (!salles.includes(x)) {
+					sallespourres.push(x);
+				}
+			}
+		} else if (Amphi.current.value == "Amphi") {
+			for (let x of sallers2) {
+				if (!salles.includes(x)) {
+					sallespourres.push(x);
+				}
+			}
+		} else if (Amphi.current.value == "MS") {
+			for (let x of sallers3) {
+				if (!salles.includes(x)) {
+					sallespourres.push(x);
+				}
+			}
+		}
+		setResults(sallespourres.map((result)=>
+		<a href="/Consulter1" className="list-group-item list-group-item-action">
+		{result}
+	    </a>
+		))
 	};
 
 	return (
-		<div>
+		<>
+			<div>
 				<div className="form-group row">
 					<label for="inputusername3" className="col-sm-2 col-form-label">
 						Date
@@ -66,7 +110,7 @@ export default function Form1() {
 							<option value={"S2"}>10:15 - 11:45</option>
 							<option value={"S3"}>12:00 - 10:00</option>
 							<option value={"S4"}>13:45 - 15:15</option>
-							<option value={"S4"}>15:30 - 17:00</option>
+							<option value={"S5"}>15:30 - 17:00</option>
 						</select>
 					</div>
 				</div>
@@ -78,8 +122,8 @@ export default function Form1() {
 					<div className="col-sm-10">
 						<select className="form-control" ref={Amphi}>
 							<option>Amphi</option>
-							<option>Salles de TD</option>
-							<option>Salles de Master</option>
+							<option>TD</option>
+							<option>SM</option>
 						</select>
 					</div>
 				</div>
@@ -95,18 +139,11 @@ export default function Form1() {
 						</button>
 					</div>
 				</div>
-			<div className="col-lg-10 offset-lg-2 mt-5">
-				<div className="list-group">
-					<a
-						href="#"
-						className="list-group-item list-group-item-dark list-group-item-action active"
-						aria-current="true"
-					>
-						{Amphi.current.value}
-					</a>
-					{salles}
+				<div className="col-lg-10 offset-lg-2 mt-5">
+					<div className="list-group">{salles}</div>
+					{results}
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }

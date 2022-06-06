@@ -1,8 +1,10 @@
 import React from "react";
 import Header from "../../navbar/header/Header";
+import jwt_decode from "jwt-decode"
 import "./Profile.css";
 
 export default function Profile() {
+  console.log(jwt_decode(localStorage.getItem("token")))
   return (
       <>
       <Header/>

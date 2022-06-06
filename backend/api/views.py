@@ -1,10 +1,9 @@
 
-from requests import request
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from api import models
-from .serializer import ReservationSerializer, ProfesseurSerializer, SalleSerializer, MyTokenObtainPairSerializer, RegisterSerializer
+from .serializer import ReservationSerializer, MyTokenObtainPairSerializer, RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -26,29 +25,9 @@ class DetailReservation(generics.RetrieveUpdateDestroyAPIView):
 @permission_classes([IsAuthenticated])
 class Reservationview(APIView):
     def get(self, request):
-        result = Reservation.objects.filter()
+        result = models.Reservation.objects.filter()
         return Response({"results":result})
         
-@permission_classes([IsAuthenticated])
-class ListProfesseur(generics.ListCreateAPIView):
-    queryset = models.Professeur.objects.all()
-    serializer_class = ProfesseurSerializer
-
-@permission_classes([IsAuthenticated])
-class DetailProfesseur(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Professeur.objects.all()
-    serializer_class = ProfesseurSerializer
-
-@permission_classes([IsAuthenticated])
-class ListSalle(generics.ListCreateAPIView):
-    queryset = models.Salle.objects.all()
-    serializer_class = SalleSerializer
-
-@permission_classes([IsAuthenticated])
-class DetailSalle(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Salle.objects.all()
-    serializer_class = SalleSerializer
-
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer

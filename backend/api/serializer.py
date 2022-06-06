@@ -1,45 +1,23 @@
 from os import rename
 from django.shortcuts import redirect, render
-from django.contrib.auth.password_validation import validate_password   
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from api import models
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'idR',
             'idU',
-            'idS',
+            'Type',
             'dateRES',
             'Houre',
         )
         model = models.Reservation
-
-
-class ProfesseurSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = (
-            'idU',
-            'Nom',
-            'Prenom',
-            'Username',
-            'Photo',
-        )
-        model = models.Professeur
-
-
-class SalleSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = (
-            'idS',
-            'Nom',
-            'Type',
-        )
-        model = models.Salle
-
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -51,6 +29,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         # ...
         return token
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -68,7 +47,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs
 
-
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['username']
@@ -76,9 +54,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.save()
-        
+
         # create a professor with the same id and save it
-        professeur = models.Professeur.objects.create(idU=user.id,Nom=validated_data['nom'],Prenom=validated_data['prenom'],Username=validated_data['username'],Photo=validated_data['photo'])
+        professeur = models.Professeur.objects.create(
+            idU=user.id, Nom=validated_data['nom'], Prenom=validated_data['prenom'], Username=validated_data['username'], Photo=validated_data['photo'])
         professeur.save()
 
         return user

@@ -1,11 +1,15 @@
 import React from "react";
 import "./Header.css";
+import jwt_decode from "jwt-decode"
 
-export default function Header(props) {
+
+export default function Header() {
   const deconn = () => {
     localStorage.clear();
     window.location.href = '/';
   }
+
+
   return (
     <header className="p-3 mb-3 border-bottom">
     <div className="container">
@@ -24,7 +28,7 @@ export default function Header(props) {
           <li><a href="/Emploi" className="nav-link px-2 link-dark">Emploi du temps</a></li>
           <li><a href="#" className="nav-link px-2 link-dark">Products</a></li>
         </ul>
-
+          <div className="username"><h5>{jwt_decode(localStorage.getItem("token")).username}</h5></div>
         <div className="dropdown text-end">
           <a href="#" className="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="https://github.com/mdo.png" alt="mdo" width="50" height="50" className="rounded-circle"/>
