@@ -39,6 +39,18 @@ export default function Form1() {
 		getdata();
 	}, []);
 
+	let showres = () => {
+		if (salles !== "") {
+			return (
+				
+				<div className="list-group">
+				<a class="list-group-item list-group-item-primary">{salles}</a>
+				{results}
+				</div>
+			);
+		}
+	};
+
 	let cherche = () => {
 		var filter = {
 			dataRES: date.current.value == "" ? new Date() : date.current.value,
@@ -80,6 +92,7 @@ export default function Form1() {
 		{result}
 	    </a>
 		))
+		setSalles(Amphi.current.value);
 	};
 
 	return (
@@ -140,8 +153,7 @@ export default function Form1() {
 					</div>
 				</div>
 				<div className="col-lg-10 offset-lg-2 mt-5">
-					<div className="list-group">{salles}</div>
-					{results}
+					{showres()}
 				</div>
 			</div>
 		</>
