@@ -1,16 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import jwt_decode from "jwt-decode"
 
 export default function Form1() {
-	const [datares, setDatares] = useState("");
-	const [results, setResults] = useState([0]);
-	const [reservation, setReservation] = useState([0]);
+	const [results, setResults] = useState("");
 	const [salles, setSalles] = useState("");
 	const [data, setData] = useState("");
-	const [html, setHtml] = useState("");
+	
 	let Amphi = useRef("");
 	let temp = useRef("");
 	let date = useRef("");
+	let com = useRef("");
 
 	const sallers1 = ["TD 1", "TD 2", "TD 3", "TD 4", "TD 5", "TD 6", "TD 7"];
 	const sallers2 = [
@@ -22,7 +22,7 @@ export default function Form1() {
 		"Amphi 6",
 		"Amphi 7",
 	];
-	const sallers3 = ["MS 1", "MS 2", "MS 3", "MS 4", "MS 5", "MS 6", "MS 7"];
+	const sallers3 = ["SM 1", "SM 2", "SM 3", "SM 4", "SM 5", "SM 6", "SM 7"];
 
 	useEffect(() => {
 		let getdata = async () => {
@@ -42,9 +42,8 @@ export default function Form1() {
 	let showres = () => {
 		if (salles !== "") {
 			return (
-				
 				<div className="list-group">
-				<a class="list-group-item list-group-item-primary">{salles}</a>
+				<a class="list-group-item list-group-item-action list-group-item-dark active" >{salles}</a>
 				{results}
 				</div>
 			);
@@ -52,43 +51,53 @@ export default function Form1() {
 	};
 
 	let cherche = () => {
+		
 		var filter = {
-			dataRES: date.current.value == "" ? new Date() : date.current.value,
+			dataRES: date.current.value === "" ? new Date() : date.current.value,
 			Type: Amphi.current.value,
 			Houre: temp.current.value,
 		};
 		let rese = data.filter(
 			(result) =>
-				result.Type.split(" ")[0] == filter.Type &&
-				result.Houre == filter.Houre &&
-				result.dateRES ==   filter.dateRES
+				result.Type.split(" ")[0] === filter.Type &&
+				result.Houre === filter.Houre &&
+				result.dateRES !==   filter.dateRES
 		);
 		let salles = [];
 		let sallespourres = [];
 		for (let salle of rese) {
 			salles.push(salle.Type);
 		}
-		if (Amphi.current.value == "TD") {
+		if (Amphi.current.value === "TD") {
 			for (let x of sallers1) {
 				if (!salles.includes(x)) {
 					sallespourres.push(x);
 				}
 			}
-		} else if (Amphi.current.value == "Amphi") {
+		} else if (Amphi.current.value === "Amphi") {
 			for (let x of sallers2) {
 				if (!salles.includes(x)) {
 					sallespourres.push(x);
 				}
 			}
-		} else if (Amphi.current.value == "MS") {
+		} else if (Amphi.current.value === "SM") {
 			for (let x of sallers3) {
 				if (!salles.includes(x)) {
 					sallespourres.push(x);
 				}
 			}
 		}
+		let Valid =()=>{
+					const data = `{"dateRES": "${date.current.value}","idU": "${jwt_decode(localStorage.getItem("token")).id}","Houre": "${temp.current.value}","Type": "${Amphi.current.value }"}`
+					axios.post('http://127.0.0.1:8000/api/reservation', data,  {headers: {
+						'Content-Type': 'application/json; charset=UTF-8'}
+					  }).then((response) => {
+						alert("Mail bien envoye")
+					  });
+					}
+
 		setResults(sallespourres.map((result)=>
-		<a href="/Consulter1" className="list-group-item list-group-item-action">
+		<a href="/Validation" onClick={()=>Valid()} ref={com} className="list-group-item list-group-item-action">
 		{result}
 	    </a>
 		))
@@ -121,7 +130,7 @@ export default function Form1() {
 						<select className="form-control" ref={temp}>
 							<option value={"S1"}>8:30 - 10:00</option>
 							<option value={"S2"}>10:15 - 11:45</option>
-							<option value={"S3"}>12:00 - 10:00</option>
+							<option value={"S3"}>12:00 - 13:30</option>
 							<option value={"S4"}>13:45 - 15:15</option>
 							<option value={"S5"}>15:30 - 17:00</option>
 						</select>

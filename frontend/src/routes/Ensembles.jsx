@@ -8,7 +8,7 @@ import PageErreur from '../pages/PageErreur'
 import PageInscription from '../pages/PageInscription'
 import PageProfile from '../pages/PageProfile'
 import PageReservation from '../pages/PageReservation'
-import PageReservation1 from '../pages/PageReservation1'
+import PageValidation from '../pages/PageValidation'
 import ResetPassword from '../pages/ResetPassword'
 
 export default function Ensembles() {
@@ -17,6 +17,7 @@ export default function Ensembles() {
         <BrowserRouter>
           <Routes>
             <Route path="" element={<Authentification/>} ></Route>
+            <Route path="/Validation" element={<PageValidation/>} ></Route>
             <Route path="/Authentification" element={<Authentification/>} ></Route>
             <Route path="/Inscription" element={<PageInscription/>} ></Route>
             <Route path="/Emploi" element={<Emploi/>} ></Route>
@@ -24,7 +25,6 @@ export default function Ensembles() {
             <Route path="/Consulter1" element={<PageConsulter2/>} ></Route>
             <Route path="/Reservation" element={<PageReservation/>} ></Route>
             <Route path="/Profile" element={<PageProfile/>} ></Route>
-            <Route path="/Reservation1" element={<PageReservation1/>} ></Route>
             <Route path="/ResetPassword" element={<ResetPassword/>} ></Route>
             <Route path="/Erreur" element={<PageErreur/>} ></Route>
           </Routes>
