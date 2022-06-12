@@ -14,8 +14,6 @@ urlpatterns = [
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
-    # path('reservation_filter/', views.get_reservs(), name='reservation_filter'),
-    # path('reservation_filter_type/', views.get_reservs_type(), name='reservation_filter_type'),
 
 ]
 

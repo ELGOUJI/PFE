@@ -6,7 +6,7 @@ export default function Form1() {
 	const [results, setResults] = useState("");
 	const [salles, setSalles] = useState("");
 	const [data, setData] = useState("");
-	
+
 	let Amphi = useRef("");
 	let temp = useRef("");
 	let date = useRef("");
@@ -27,6 +27,7 @@ export default function Form1() {
 	useEffect(() => {
 		let getdata = async () => {
 			var token = localStorage.getItem("token");
+			console.log(jwt_decode(token).exp);
 			console.log(token);
 			let res = await axios.get("http://localhost:8000/api/reservation", {
 				headers: {
@@ -43,63 +44,109 @@ export default function Form1() {
 		if (salles !== "") {
 			return (
 				<div className="list-group">
-				<a class="list-group-item list-group-item-action list-group-item-dark active" >{salles}</a>
-				{results}
+					<a class="list-group-item list-group-item-action list-group-item-dark active" >{salles}</a>
+					{results}
 				</div>
 			);
 		}
 	};
 
 	let cherche = () => {
+		const dateRES = date.current.value === "" ? new Date() : date.current.value;
+		let dateRESString = null;
+		try{
+			dateRESString = dateRES.toISOString().split("T")[0];
+		}catch(e){
+			dateRESString = dateRES;
+		}
 		
 		var filter = {
-			dataRES: date.current.value === "" ? new Date() : date.current.value,
+			dataRES: dateRESString,
 			Type: Amphi.current.value,
 			Houre: temp.current.value,
 		};
-		let rese = data.filter(
-			(result) =>
-				result.Type.split(" ")[0] === filter.Type &&
-				result.Houre === filter.Houre &&
-				result.dateRES !==   filter.dateRES
-		);
-		let salles = [];
-		let sallespourres = [];
-		for (let salle of rese) {
-			salles.push(salle.Type);
-		}
-		if (Amphi.current.value === "TD") {
-			for (let x of sallers1) {
-				if (!salles.includes(x)) {
-					sallespourres.push(x);
-				}
-			}
-		} else if (Amphi.current.value === "Amphi") {
-			for (let x of sallers2) {
-				if (!salles.includes(x)) {
-					sallespourres.push(x);
-				}
-			}
-		} else if (Amphi.current.value === "SM") {
-			for (let x of sallers3) {
-				if (!salles.includes(x)) {
-					sallespourres.push(x);
-				}
-			}
-		}
-		let Valid =()=>{
-					const data = `{"dateRES": "${date.current.value}","idU": "${jwt_decode(localStorage.getItem("token")).id}","Houre": "${temp.current.value}","Type": "${Amphi.current.value }"}`
-					axios.post('http://127.0.0.1:8000/api/reservation', data,  {headers: {
-						'Content-Type': 'application/json; charset=UTF-8'}
-					  }).then((response) => {
-						alert("Mail bien envoye")
-					  });
-					}
 
-		setResults(sallespourres.map((result)=>
-		<a href="/Validation" onClick={()=>Valid()} ref={com} className="list-group-item list-group-item-action">
-		{result}
-	    </a>
+		// get all data with the same date and type and hour
+		let reservedTypes = [];
+		data.forEach(element => {
+			if (element.Type.split(' ')[0] === filter.Type && element.dateRES === filter.dataRES && element.Houre === filter.Houre) {
+				reservedTypes.push(element.Type);
+			}
+		}
+		);
+
+		console.log(reservedTypes);
+
+		// delete reserved types from the list of salles
+		if (reservedTypes.length > 0) {
+			sallers1.forEach(element => {
+				if (reservedTypes.includes(element)) {
+					sallers1.splice(sallers1.indexOf(element), 1);
+				}
+			}
+			);
+			sallers2.forEach(element => {
+				if (reservedTypes.includes(element)) {
+					sallers2.splice(sallers2.indexOf(element), 1);
+				}
+			}
+			);
+			sallers3.forEach(element => {
+				if (reservedTypes.includes(element)) {
+					sallers3.splice(sallers3.indexOf(element), 1);
+				}
+			}
+			);
+		}	
+		let sallespourres = [];
+		if (Amphi.current.value === "TD") {
+			sallespourres = sallers1;
+		}
+		if (Amphi.current.value === "Amphi") {
+			sallespourres = sallers2;
+		}
+		if (Amphi.current.value === "SM") {
+			sallespourres = sallers3;
+		}
+
+		let Valid = (event) => {
+			const dateRES = date.current.value === "" ? new Date() : date.current.value;
+			// convert dateRES to YYYY-MM-DD
+			const dateRESString = dateRES
+			try{
+				dateRESString = dateRES.getFullYear() + "-" + (dateRES.getMonth() + 1) + "-" + dateRES.getDate();
+			}catch(e){
+				console.log(dateRES);
+			}
+			const idU = jwt_decode(localStorage.getItem("token")).user_id;
+			const Houre = temp.current.value;
+			// get text of clicked item
+			const Type = event.target.innerText;
+			console.log(dateRESString, idU, Houre, Type);
+			alert(dateRESString, idU, Houre, Type);
+			const data = {"dateRES": dateRESString, "idU": idU, "Houre": Houre, "Type": Type};
+			
+			axios.post('http://127.0.0.1:8000/api/reservation', data, {
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+					"Content-Type": "application/json",
+				},
+			}).then((res) => {
+				console.log(res);
+				// redirect to "/reservation"
+				window.location.href = "/validation";
+			}
+			).catch((err) => {
+				console.log(err);
+				alert("Erreur");
+			}
+			);
+		}
+
+		setResults(sallespourres.map((result) =>
+			<a onClick={(event) => Valid(event)} ref={com} className="list-group-item list-group-item-action">
+				{result}
+			</a>
 		))
 		setSalles(Amphi.current.value);
 	};

@@ -23,7 +23,6 @@ export default function FormCon1() {
 	useEffect(() => {
 		let getdata = async () => {
 			var token = localStorage.getItem("token");
-			console.log(token);
 			let res = await axios.get("http://localhost:8000/api/reservation", {
 				headers: {
 					Authorization: "Bearer " + token,
@@ -51,6 +50,7 @@ export default function FormCon1() {
 		var filter = {
 			Type: Amphi.current.value,
 		};
+		console.log(data);
 		let rese = data.filter(
 			(result) =>
 				result.Type.split(" ")[0] == filter.Type 
@@ -61,23 +61,11 @@ export default function FormCon1() {
 			salles.push(salle.Type);
 		}
 		if (Amphi.current.value == "TD") {
-			for (let x of sallers1) {
-				if (!salles.includes(x)) {
-					sallespourres.push(x);
-				}
-			}
+			sallespourres = sallers1;
 		} else if (Amphi.current.value == "Amphi") {
-			for (let x of sallers2) {
-				if (!salles.includes(x)) {
-					sallespourres.push(x);
-				}
-			}
-		} else if (Amphi.current.value == "MS") {
-			for (let x of sallers3) {
-				if (!salles.includes(x)) {
-					sallespourres.push(x);
-				}
-			}
+			sallespourres = sallers2;
+		} else if (Amphi.current.value == "SM") {
+			sallespourres = sallers3;
 		}
 		setResults(sallespourres.map((result)=>
 		<a href="/Consulter1" className="list-group-item list-group-item-action">
@@ -101,7 +89,7 @@ export default function FormCon1() {
 					</select>
 				</div>
 			</div>
-			<br />
+			<br/>
 			<div className="form-group row">
 				<div className="col-sm-10">
 					<button

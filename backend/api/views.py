@@ -32,22 +32,23 @@ class Reservationview(APIView):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
-
-# @permission_classes([IsAuthenticated])
-# Get reservations not matching date and hour and type
-# def get_reservs():
-#     return models.Reservation.objects.filter(dateRES=request.GET.get('date'),Houre=request.GET.get('hour'),Type=request.GET.get('type')).exclude(id!='')
-@api_view(['GET'])
-def getRoutes(request):
-    routes = [
-        '/api/token/',
-        '/api/register/',
-        '/api/token/refresh/'
-    ]
-    return Response(routes)
+    
+# def register(request):
+#     if request.method == 'POST':
+#         serializer = RegisterSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = serializer.save()
+#             userinfo = models.Userinfo.objects.create(
+#                 idUD=user.id,
+#                 nom=request.data['nom'],
+#                 prenom=request.data['prenom'],
+#                 role=request.data['role'],
+#             )
+#             userinfo.save()
+#             return "ok"
+#     return "error"

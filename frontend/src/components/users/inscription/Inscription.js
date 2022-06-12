@@ -1,15 +1,16 @@
 import React from "react";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
 import "./Inscription.css";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 export default function Inscription() {
+
   let username = useRef("");
   let password = useRef("");
   let Nom = useRef("");
   let Prenom = useRef("");
-  let Fillier = useRef("");
-
+  let conf_password = useRef("");
   let valider = () => {
     username.current.value == ""
       ? username.current.classList.add("is-invalid")
@@ -23,10 +24,54 @@ export default function Inscription() {
     Prenom.current.value == ""
       ? Prenom.current.classList.add("is-invalid")
       : Prenom.current.classList.remove("is-invalid");
-    Fillier.current.value == ""
-      ? Fillier.current.classList.add("is-invalid")
-      : Fillier.current.classList.remove("is-invalid");
+    conf_password.current.value == ""
+      ? conf_password.current.classList.add("is-invalid")
+      : conf_password.current.classList.remove("is-invalid");
+    if (
+      username.current.value != "" &&
+      password.current.value != "" &&
+      Nom.current.value != "" &&
+      Prenom.current.value != "" && 
+      conf_password.current.value != ""
+    ) {
+      if (password.current.value == conf_password.current.value) {
+        let data = {
+          username: username.current.value,
+          password: password.current.value,
+          first_name: Nom.current.value,
+          last_name: Prenom.current.value
+        };
+        if (jwt_decode(localStorage.getItem("token")).username != "admin") {
+            alert('Vous n\'êtes pas autorisé à faire cette action');
+            window.location.href = "/";
+        }
+        axios
+          .post("http://localhost:8000/api/register/", data)
+          .then((res) => {
+            console.log(res);
+            alert("Inscription réussie");
+            window.location.replace("http://www.localhost:8000/admin/");
+          }
+          )
+          .catch((err) => {
+            console.log(err);
+            alert("Erreur d'inscription");
+            if (err.response.data.password){
+              alert(err.response.data.password);
+            }
+            if (err.response.data.username){
+              alert(err.response.data.username);
+            }
+          }
+          );
+      } else {
+        alert("Les mots de passe ne correspondent pas");
+      }
+    }
+
   };
+
+
   return (
     <div className="container-fluid">
       <div className="col-lg-4 offset-lg-4">
@@ -52,19 +97,10 @@ export default function Inscription() {
       </div>
       <div className="col-lg-4 offset-lg-4 px-5 mt-3">
         <input
-          ref={Fillier}
-          className="form-control"
-          type="text"
-          placeholder="Filliér"
-        ></input>
-        <div className="invalid-feedback">* Please choose a Filliér.</div>
-      </div>
-      <div className="col-lg-4 offset-lg-4 px-5 mt-3">
-        <input
           ref={username}
           className="form-control"
           type="username"
-          placeholder="username"
+          placeholder="Username"
         ></input>
         <div className="invalid-feedback">* Please choose a username.</div>
       </div>
@@ -73,43 +109,18 @@ export default function Inscription() {
           ref={password}
           className="form-control"
           type="password"
-          placeholder="Mot de pass"
+          placeholder="Mot de passe"
         ></input>
         <div className="invalid-feedback">* Please choose a Password.</div>
       </div>
-      <div className="col-lg-4 offset-lg-4 mt-3 px-5">
-        <div className="row">
-          <div className="col-lg-2"> sexe :</div>
-          <div className="col-lg-3">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="gridRadios"
-                id="gridRadios1"
-                value="option1"
-                checked
-              />
-              <label className="form-check-label" for="gridRadios1">
-                Homme
-              </label>
-            </div>
-          </div>
-          <div className="col-lg-4">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="gridRadios"
-                id="gridRadios2"
-                value="option2"
-              />
-              <label className="form-check-label" for="gridRadios2">
-                Femme
-              </label>
-            </div>
-          </div>
-        </div>
+      <div className="col-lg-4 offset-lg-4 px-5 mt-3">
+        <input
+          ref={conf_password}
+          className="form-control"
+          type="password"
+          placeholder="Confirmer mot de passe"
+        ></input>
+        <div className="invalid-feedback">* Please choose a Password.</div>
       </div>
 
       <div className="col-lg-4 offset-lg-4">
