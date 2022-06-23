@@ -84,7 +84,7 @@ export default function FormCon1() {
 		setResults(
 			sallespourres.map((result) => (
 				<a
-					href="/Consulter1"
+					href={"/Consulter1#"+result}
 					className="list-group-item list-group-item-action"
 				>
 					{result}

@@ -30,6 +30,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
 
         return token
+    
 
 
 class RegisterSerializer(serializers.ModelSerializer):

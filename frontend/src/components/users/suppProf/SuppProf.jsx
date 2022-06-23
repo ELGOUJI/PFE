@@ -27,45 +27,45 @@ export default function SuppProf() {
 		refreshtoken();
 		let getdata = async () => {
 			var token = localStorage.getItem("token");
-			let res = await axios.get("http://localhost:8000/api/reservation", {
+			let res = await axios.get("http://localhost:8000/api/users/", {
 				headers: {
 					Authorization: "Bearer " + token,
 				},
 			});
 
 			setData(res.data);
+			console.log(res.data);
 			let filtered = [];
 			try {
-				res.data.forEach((ele) => {
-					if (ele.idU === jwt_decode(localStorage.getItem("token")).user_id) {
-						filtered.push(ele);
+				res.data.results.forEach((ele) => {
+					if (ele.username !=="admin") {
+					filtered.push(ele);
 					}
 				});
 				console.log("This the data with foreach");
-			} catch {
+			} catch(error) {
 				console.log("This the data");
 				console.log(data);
+				console.log(error);
 			}
 			console.log(filtered.length);
 			if (filtered.length === 0) {
 				setFilterdata(
 					<tr>
-						<td colSpan={4}>Pas de reservations</td>
+						<td colSpan={6}>Pas d'utilisateurs</td>
 					</tr>
 				);
 			} else {
 				setFilterdata(
 					filtered.map((result) => (
-						<tr>
-							<td>{result.Type}</td>
-							<td>{result.dateRES}</td>
-							<td>{result.Houre}</td>
-							<td>{result.titre}</td>
-							<td>{result.Houre}</td>
-							<td>{result.titre}</td>
+						<tr style={{width:"100%"}}>
+							<td>{result.username}</td>
+							<td>{result.email}</td>
+							<td>{result.first_name}</td>
+							<td>{result.last_name}</td>
 							<td>
 								<a
-									id={result.idR}
+									id={result.username}
 									onClick={onDelete}
 									className="btn btn-sm btn-danger mx-2"
 								>
@@ -91,9 +91,9 @@ export default function SuppProf() {
 		console.log("Gonna delete this shit");
 		axios
 			.delete(
-				"http://localhost:8000/api/reservation/delete/" +
-					event.currentTarget.id +
-					"/",
+				"http://localhost:8000/api/users/delete/" +
+				event.currentTarget.id +
+				"/",
 				{
 					headers: {
 						Authorization: "Bearer " + token,
@@ -102,7 +102,7 @@ export default function SuppProf() {
 			)
 			.then((res) => {
 				console.log(res);
-				window.location.href = "/MesReservation";
+				window.location.href = "/SupprimerProf";
 			});
 	};
 
@@ -115,12 +115,10 @@ export default function SuppProf() {
 						<table className="table table-striped table-hover table-sm">
 							<thead>
 								<tr className="table-dark">
-									<th scope="col">#</th>
 									<th scope="col">username</th>
 									<th scope="col">Nom</th>
 									<th scope="col">Prenom</th>
 									<th scope="col">Email</th>
-									<th scope="col">Password</th>
 									<th scope="col">Action</th>
 								</tr>
 							</thead>

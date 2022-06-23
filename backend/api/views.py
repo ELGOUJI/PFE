@@ -46,3 +46,16 @@ def delete_items(request, pk):
     item.delete()
     return Response("Deleted")
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_all_users(request):
+    users = User.objects.all()
+    serializer = RegisterSerializer(users, many=True)
+    return Response({"results":serializer.data})
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user(request, pk):
+    user = User.objects.get(username=pk)
+    user.delete()
+    return Response("Deleted")

@@ -13,7 +13,7 @@
   align-items: center;
 }
 /* border of the table */
-table, .thr, .tdr {
+.tableres, .thr, .tdr {
   border: 1px solid rgba(132, 132, 231, 0.773);
 }
 /* center the table */
@@ -48,4 +48,11 @@ table, .thr, .tdr {
 .reserved{
     background-color: #c6daf3;
     cursor: not-allowed;
+}
+#semaine_reservation{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
 }
