@@ -5,7 +5,7 @@ export default function FormCon1() {
 	const [results, setResults] = useState([0]);
 	const [salles, setSalles] = useState("");
 	const [data, setData] = useState("");
-	
+
 	let Amphi = useRef("");
 
 	const sallers1 = ["TD 1", "TD 2", "TD 3", "TD 4", "TD 5", "TD 6", "TD 7"];
@@ -18,9 +18,23 @@ export default function FormCon1() {
 		"Amphi 6",
 		"Amphi 7",
 	];
-	const sallers3 = ["MS 1", "MS 2", "MS 3", "MS 4", "MS 5", "MS 6", "MS 7"];
+	const sallers3 = ["SM 1", "SM 2", "SM 3", "SM 4", "SM 5", "SM 6", "SM 7"];
+
+	const refreshtoken = () => {
+		let refresh = localStorage.getItem("refresh");
+		axios
+			.post("http://127.0.0.1:8000/api/token/refresh/", {
+				refresh: refresh,
+			})
+			.then((res) => {
+				console.log("refresh");
+				localStorage.setItem("token", res.data.access);
+				localStorage.setItem("refresh", res.data.refresh);
+			});
+	};
 
 	useEffect(() => {
+		refreshtoken();
 		let getdata = async () => {
 			var token = localStorage.getItem("token");
 			let res = await axios.get("http://localhost:8000/api/reservation", {
@@ -37,10 +51,11 @@ export default function FormCon1() {
 	let showres = () => {
 		if (salles !== "") {
 			return (
-				
 				<div className="list-group">
-				<a class="list-group-item list-group-item-action list-group-item-dark active">{salles}</a>
-				{results}
+					<a class="list-group-item list-group-item-action list-group-item-dark active">
+						{salles}
+					</a>
+					{results}
 				</div>
 			);
 		}
@@ -52,8 +67,7 @@ export default function FormCon1() {
 		};
 		console.log(data);
 		let rese = data.filter(
-			(result) =>
-				result.Type.split(" ")[0] == filter.Type 
+			(result) => result.Type.split(" ")[0] == filter.Type
 		);
 		let salles = [];
 		let sallespourres = [];
@@ -67,11 +81,16 @@ export default function FormCon1() {
 		} else if (Amphi.current.value == "SM") {
 			sallespourres = sallers3;
 		}
-		setResults(sallespourres.map((result)=>
-		<a href="/Consulter1" className="list-group-item list-group-item-action">
-		{result}
-	    </a>
-		))
+		setResults(
+			sallespourres.map((result) => (
+				<a
+					href="/Consulter1"
+					className="list-group-item list-group-item-action"
+				>
+					{result}
+				</a>
+			))
+		);
 		setSalles(Amphi.current.value);
 	};
 
@@ -89,7 +108,7 @@ export default function FormCon1() {
 					</select>
 				</div>
 			</div>
-			<br/>
+			<br />
 			<div className="form-group row">
 				<div className="col-sm-10">
 					<button

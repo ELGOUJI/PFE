@@ -19,7 +19,6 @@ export default function Reset() {
             </div>
             <div className='col-lg-4 offset-lg-4'><button onClick={() => envy()} className='btn btn-dark start'>Envoyer</button></div>
             <div className='col-lg-4 offset-lg-4 mt-3'><Link className='annuler' to={'/authentification'}><a> Annuler</a></Link></div>
-            <div className='col-lg-4 offset-lg-4'><p className='cpr2'>Copyrigth 2022 &copy | In Data Bee ...</p></div>
         </div>
     )
 }

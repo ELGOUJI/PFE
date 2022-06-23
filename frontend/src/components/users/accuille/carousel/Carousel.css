@@ -1,0 +1,23 @@
+.bd-img{
+    margin-left: 700px;
+}
+
+.carousel-caption {
+    position: absolute;
+    right: 60%;
+    bottom: 1.25rem;
+    top: 16%;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    color: #fff;
+    text-align: center;
+    left: 10%;
+}   
+.carousel-caption h5{
+    font-weight: bolder;
+    text-shadow: 1px 0.5px 0.5px darkblue;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.carousel-caption h5,.carousel-caption p{
+    font-size: 200%;
+}

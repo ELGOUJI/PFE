@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from api import models
+from api.models import Reservation
 from .serializer import ReservationSerializer, MyTokenObtainPairSerializer, RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -38,17 +39,10 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
     
-# def register(request):
-#     if request.method == 'POST':
-#         serializer = RegisterSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             userinfo = models.Userinfo.objects.create(
-#                 idUD=user.id,
-#                 nom=request.data['nom'],
-#                 prenom=request.data['prenom'],
-#                 role=request.data['role'],
-#             )
-#             userinfo.save()
-#             return "ok"
-#     return "error"
+
+@api_view(['DELETE'])
+def delete_items(request, pk):
+    item = Reservation.objects.get(idR=pk)
+    item.delete()
+    return Response("Deleted")
+

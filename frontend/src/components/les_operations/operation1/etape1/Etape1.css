@@ -9,5 +9,26 @@
     
 }
 .cherche{
-    margin-left: 110px;
+    margin-left: 90px;
 }
+
+.op1-intro__bg {
+    display             : block;
+    position            : absolute;
+    top                 : 0;
+    left                : 0;
+    right               : 0;
+    bottom              : 0;
+    width               : 100%;
+    height              : 90%;
+    background-image    : url(../../../../images/calendar1.jpg);
+    background-repeat   : no-repeat;
+    background-position : right;
+    background-size     : contain;
+}
+
+.ft-t{
+    margin-top: 450px;
+}
+
+

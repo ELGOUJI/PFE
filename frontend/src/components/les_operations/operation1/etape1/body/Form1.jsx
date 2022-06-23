@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import jwt_decode from "jwt-decode"
+import jwt_decode from "jwt-decode";
 
 export default function Form1() {
 	const [results, setResults] = useState("");
@@ -11,6 +11,7 @@ export default function Form1() {
 	let temp = useRef("");
 	let date = useRef("");
 	let com = useRef("");
+	let titres = useRef("");
 
 	const sallers1 = ["TD 1", "TD 2", "TD 3", "TD 4", "TD 5", "TD 6", "TD 7"];
 	const sallers2 = [
@@ -24,11 +25,23 @@ export default function Form1() {
 	];
 	const sallers3 = ["SM 1", "SM 2", "SM 3", "SM 4", "SM 5", "SM 6", "SM 7"];
 
+	const refreshtoken = () => {
+		let refresh = localStorage.getItem("refresh");
+		axios
+			.post("http://127.0.0.1:8000/api/token/refresh/", {
+				refresh: refresh,
+			})
+			.then((res) => {
+				console.log("refresh");
+				localStorage.setItem("token", res.data.access);
+				localStorage.setItem("refresh", res.data.refresh);
+			});
+	};
+
 	useEffect(() => {
+		refreshtoken();
 		let getdata = async () => {
 			var token = localStorage.getItem("token");
-			console.log(jwt_decode(token).exp);
-			console.log(token);
 			let res = await axios.get("http://localhost:8000/api/reservation", {
 				headers: {
 					Authorization: "Bearer " + token,
@@ -44,7 +57,9 @@ export default function Form1() {
 		if (salles !== "") {
 			return (
 				<div className="list-group">
-					<a class="list-group-item list-group-item-action list-group-item-dark active" >{salles}</a>
+					<a class="list-group-item list-group-item-action list-group-item-dark active">
+						{salles}
+					</a>
 					{results}
 				</div>
 			);
@@ -54,12 +69,12 @@ export default function Form1() {
 	let cherche = () => {
 		const dateRES = date.current.value === "" ? new Date() : date.current.value;
 		let dateRESString = null;
-		try{
+		try {
 			dateRESString = dateRES.toISOString().split("T")[0];
-		}catch(e){
+		} catch (e) {
 			dateRESString = dateRES;
 		}
-		
+
 		var filter = {
 			dataRES: dateRESString,
 			Type: Amphi.current.value,
@@ -68,36 +83,36 @@ export default function Form1() {
 
 		// get all data with the same date and type and hour
 		let reservedTypes = [];
-		data.forEach(element => {
-			if (element.Type.split(' ')[0] === filter.Type && element.dateRES === filter.dataRES && element.Houre === filter.Houre) {
+		data.forEach((element) => {
+			if (
+				element.Type.split(" ")[0] === filter.Type &&
+				element.dateRES === filter.dataRES &&
+				element.Houre === filter.Houre
+			) {
 				reservedTypes.push(element.Type);
 			}
-		}
-		);
+		});
 
 		console.log(reservedTypes);
 
 		// delete reserved types from the list of salles
 		if (reservedTypes.length > 0) {
-			sallers1.forEach(element => {
+			sallers1.forEach((element) => {
 				if (reservedTypes.includes(element)) {
 					sallers1.splice(sallers1.indexOf(element), 1);
 				}
-			}
-			);
-			sallers2.forEach(element => {
+			});
+			sallers2.forEach((element) => {
 				if (reservedTypes.includes(element)) {
 					sallers2.splice(sallers2.indexOf(element), 1);
 				}
-			}
-			);
-			sallers3.forEach(element => {
+			});
+			sallers3.forEach((element) => {
 				if (reservedTypes.includes(element)) {
 					sallers3.splice(sallers3.indexOf(element), 1);
 				}
-			}
-			);
-		}	
+			});
+		}
 		let sallespourres = [];
 		if (Amphi.current.value === "TD") {
 			sallespourres = sallers1;
@@ -110,44 +125,63 @@ export default function Form1() {
 		}
 
 		let Valid = (event) => {
-			const dateRES = date.current.value === "" ? new Date() : date.current.value;
+			const dateRES =
+				date.current.value === "" ? new Date() : date.current.value;
 			// convert dateRES to YYYY-MM-DD
-			const dateRESString = dateRES
-			try{
-				dateRESString = dateRES.getFullYear() + "-" + (dateRES.getMonth() + 1) + "-" + dateRES.getDate();
-			}catch(e){
+			const dateRESString = dateRES;
+			try {
+				dateRESString =
+					dateRES.getFullYear() +
+					"-" +
+					(dateRES.getMonth() + 1) +
+					"-" +
+					dateRES.getDate();
+			} catch (e) {
 				console.log(dateRES);
 			}
 			const idU = jwt_decode(localStorage.getItem("token")).user_id;
 			const Houre = temp.current.value;
 			// get text of clicked item
 			const Type = event.target.innerText;
+			const Titre = titres.current.value;
 			console.log(dateRESString, idU, Houre, Type);
-			alert(dateRESString, idU, Houre, Type);
-			const data = {"dateRES": dateRESString, "idU": idU, "Houre": Houre, "Type": Type};
-			
-			axios.post('http://127.0.0.1:8000/api/reservation', data, {
-				headers: {
-					Authorization: "Bearer " + localStorage.getItem("token"),
-					"Content-Type": "application/json",
-				},
-			}).then((res) => {
-				console.log(res);
-				// redirect to "/reservation"
-				window.location.href = "/validation";
-			}
-			).catch((err) => {
-				console.log(err);
-				alert("Erreur");
-			}
-			);
-		}
+			const data = {
+				dateRES: dateRESString,
+				idU: idU,
+				Houre: Houre,
+				Type: Type,
+				titre: Titre,
+			};
 
-		setResults(sallespourres.map((result) =>
-			<a onClick={(event) => Valid(event)} ref={com} className="list-group-item list-group-item-action">
-				{result}
-			</a>
-		))
+			axios
+				.post("http://127.0.0.1:8000/api/reservation", data, {
+					headers: {
+						Authorization: "Bearer " + localStorage.getItem("token"),
+						"Content-Type": "application/json",
+					},
+				})
+				.then((res) => {
+					console.log(res);
+					// redirect to "/reservation"
+					window.location.href = "/validation";
+				})
+				.catch((err) => {
+					console.log(err);
+					alert("saisir date");
+				});
+		};
+
+		setResults(
+			sallespourres.map((result) => (
+				<a
+					onClick={(event) => Valid(event)}
+					ref={com}
+					className="list-group-item list-group-item-action"
+				>
+					{result}
+				</a>
+			))
+		);
 		setSalles(Amphi.current.value);
 	};
 
@@ -196,6 +230,14 @@ export default function Form1() {
 						</select>
 					</div>
 				</div>
+				<div className="form-group row mt-4">
+					<label for="inputPassword3" className="col-sm-2 col-form-label">
+						Titre
+					</label>
+					<div className="col-sm-10">
+						<input className="form-control" ref={titres} type="text"></input>
+					</div>
+				</div>
 				<br />
 				<div className="form-group row">
 					<div className="col-sm-10">
@@ -208,9 +250,7 @@ export default function Form1() {
 						</button>
 					</div>
 				</div>
-				<div className="col-lg-10 offset-lg-2 mt-5">
-					{showres()}
-				</div>
+				<div className="col-lg-10 offset-lg-2 mt-5">{showres()}</div>
 			</div>
 		</>
 	);

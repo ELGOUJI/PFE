@@ -7,8 +7,8 @@ export default function Validation() {
   return (
     <div>
         <Header/>
-        <img src={img} className="rounded mx-auto d-block mt-5" width='300px' height='300px' alt=''></img>
-        <h1 className="Validation" >command is valide !!!</h1>
+        <img src={img} className="rounded mx-auto d-block validat" width='100px' height='100px' alt=''></img>
+        <h1 className="Validation" >la réservation est réussie</h1>
     </div>
   )
 }

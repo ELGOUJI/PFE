@@ -1,0 +1,51 @@
+/* center div in the midel of the page */
+.tdr{
+    padding: 10px;
+}
+.thr{
+    padding: 10px;
+}
+/* align items of the table to center */
+.tableres {
+  margin: auto;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+}
+/* border of the table */
+table, .thr, .tdr {
+  border: 1px solid rgba(132, 132, 231, 0.773);
+}
+/* center the table */
+.tableres {
+  margin: auto;
+  width: 80vw;
+  height: 80vh;
+  justify-content: center;
+  align-items: center;
+  color: rgb(60, 125, 209);
+}
+/* .Tdr as square */
+.tdr {
+  width: 50px;
+  height: 50px;
+}
+/* center text in the table */
+.tdr,.thr {
+  text-align: center;
+}
+.tdr:nth-child(2):hover,
+.tdr:nth-child(3):hover,
+.tdr:nth-child(4):hover,
+.tdr:nth-child(5):hover,
+.tdr:nth-child(6):hover,
+.tdr:nth-child(7):hover{
+    background-color: rgba(132, 132, 231, 0.423);
+}
+.tdr{
+    cursor: pointer;
+}
+.reserved{
+    background-color: #c6daf3;
+    cursor: not-allowed;
+}
