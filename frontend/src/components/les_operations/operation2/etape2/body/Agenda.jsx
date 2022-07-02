@@ -3,7 +3,6 @@ import './Agenda.css'
 import { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { date } from "faker/lib/locales/az";
 
 
 export default function Agenda() {
@@ -221,7 +220,7 @@ export default function Agenda() {
 
 	return (
 		<div className="row">
-			<h4 className="text-left container col-2" style={{ color: "darkblue", marginLeft: "10vw", marginTop: "10px", float: "left" }}><i>Reservation {title}</i></h4>
+			<h4 className="text-left container col-2" style={{ color: "darkblue", marginLeft: "10vw", marginTop: "10px", float: "left" }}><i>Réservations {title}</i></h4>
 			<h4 className="col-12">
 				<nav
 					id="semaine_reservation"

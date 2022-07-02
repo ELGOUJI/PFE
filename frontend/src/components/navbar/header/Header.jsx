@@ -16,7 +16,7 @@ export default function Header() {
 						Ajouter un professeur
 					</a>
 					<a className="dropdown-item" href="/SupprimerProf">
-						Supprimer un professeur
+						Retirer un professeur
 					</a>
 					<a className="dropdown-item" href="http://127.0.0.1:8000/admin/">
 						Modifier emploi du temps
@@ -58,7 +58,7 @@ export default function Header() {
 								href="/MesReservation"
 								className="nav-link px-2 link-secondary "
 							>
-								Mes Réservation
+								Mes Réservations
 							</a>
 						</li>
 						<li>

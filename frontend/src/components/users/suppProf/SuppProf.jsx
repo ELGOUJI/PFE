@@ -60,9 +60,9 @@ export default function SuppProf() {
 					filtered.map((result) => (
 						<tr style={{width:"100%"}}>
 							<td>{result.username}</td>
-							<td>{result.email}</td>
-							<td>{result.first_name}</td>
 							<td>{result.last_name}</td>
+							<td>{result.first_name}</td>
+							<td>{result.email}</td>
 							<td>
 								<a
 									id={result.username}
@@ -71,12 +71,7 @@ export default function SuppProf() {
 								>
 									Supprimer
 								</a>
-								<a
-									href="/Reservation"
-									className="btn btn-sm btn-success mx-2"
-								>
-									Modifier
-								</a>
+							
 							</td>
 						</tr>
 					))
